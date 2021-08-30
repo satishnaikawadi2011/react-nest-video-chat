@@ -12,11 +12,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { EVENTS } from './constants';
-import { messageData } from './types';
+import { AnswerCallData, CallUserData } from './types';
 @WebSocketGateway()
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 	private logger: Logger = new Logger('ChatGateway');
-	private users: string[] = [];
 
 	@WebSocketServer() server: Server;
 
@@ -26,34 +25,23 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	handleConnection(client: Socket, ...args: any[]) {
 		this.logger.log(`Client connected: ${client.id}`);
-		this.users.push(client.id);
+		client.emit(EVENTS.me, { socketId: client.id });
 	}
 
 	handleDisconnect(client: Socket) {
-		this.users = this.users.filter((user) => user != client.id);
 		this.logger.log(`Client disconnected: ${client.id}`);
+		client.broadcast.emit(EVENTS.callEnded);
 	}
 
-	@SubscribeMessage(EVENTS.message)
-	handleMessage(@MessageBody() data: messageData, @ConnectedSocket() socket: Socket) {
-		console.log('Message has emiited and passed the following data ', data);
-		console.log('Message event is emmiting the send event with data as age.');
-		console.log(this.users);
-		if (this.users.length > 1) {
-			this.server.to(this.users[0]).emit(EVENTS.send, data.age);
-		}
+	@SubscribeMessage(EVENTS.callUser)
+	handleCallUser(@MessageBody() data: CallUserData, @ConnectedSocket() socket: Socket) {
+		const { from, name, signalData } = data;
+		this.server.to(data.userToCall).emit(EVENTS.callUser, { signal: signalData, from, name });
 	}
 
-	@SubscribeMessage(EVENTS.send)
-	handleSend(@MessageBody() data: number, @ConnectedSocket() socket: Socket) {
-		console.log('Send has emiited and passed the number ' + data + ' as data.');
-		if (this.users.length > 1) {
-			this.server.to(this.users[0]).emit(EVENTS.test, 11);
-		}
-	}
-
-	@SubscribeMessage(EVENTS.test)
-	handleTest(@MessageBody() data: number, @ConnectedSocket() socket: Socket) {
-		console.log('Test has emiited and passed the number ' + data + ' as data.');
+	@SubscribeMessage(EVENTS.answerCall)
+	handleAnswerCall(@MessageBody() data: AnswerCallData, @ConnectedSocket() socket: Socket) {
+		const { signal, to } = data;
+		this.server.to(to).emit(EVENTS.callAccepted, { signal });
 	}
 }
