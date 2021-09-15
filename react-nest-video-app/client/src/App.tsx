@@ -1,54 +1,32 @@
-import { makeStyles, Typography, AppBar } from '@material-ui/core';
+import { Col, Row } from 'antd';
 import React from 'react';
 import './App.css';
-import Notifications from './components/Notifications';
-import Options from './components/Options';
-import VideoPlayer from './components/VideoPlayer';
-
-const useStyles = makeStyles((theme) => ({
-	appBar:
-		{
-			borderRadius: 15,
-			margin: '30px 100px',
-			display: 'flex',
-			flexDirection: 'row',
-			justifyContent: 'center',
-			alignItems: 'center',
-			width: '600px',
-			border: '2px solid black',
-
-			[theme.breakpoints.down('xs')]:
-				{
-					width: '90%'
-				}
-		},
-	image:
-		{
-			marginLeft: '15px'
-		},
-	wrapper:
-		{
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'center',
-			width: '100%'
-		}
-}));
+import AppIconButton from './components/AppIconButton';
+import VideoIcon from './icons/Video';
+import CallEnd from './icons/CallEnd';
+import DesktopIcon from './icons/Desktop';
+import AudioIcon from './icons/Audio';
 
 function App() {
-	const classes = useStyles();
 	return (
-		<div className={classes.wrapper}>
-			<AppBar className={classes.appBar} position="static" color="inherit">
-				<Typography variant="h2" align="center">
-					Video Chat
-				</Typography>
-			</AppBar>
-			<VideoPlayer />
-			<Options>
-				<Notifications />
-			</Options>
-		</div>
+		<React.Fragment>
+			<Row gutter={16} justify="space-around" style={{ height: '95vh', margin: '1rem', overflow: 'hidden' }}>
+				<Col span={16}>
+					<Row style={{ backgroundColor: 'red', borderRadius: 25, height: '78%', marginBottom: 10 }}>
+						Video
+					</Row>
+					<Row style={{ backgroundColor: '#d9d9d9', borderRadius: 25, height: '20%' }} justify="center">
+						<AppIconButton title="Cam" icon={<VideoIcon height={30} width={30} />} />
+						<AppIconButton title="Mic" icon={<AudioIcon height={30} width={30} />} />
+						<AppIconButton title="Share" icon={<DesktopIcon height={30} width={30} />} />
+						<AppIconButton title="Leave" icon={<CallEnd height={30} width={30} />} />
+					</Row>
+				</Col>
+				<Col style={{ backgroundColor: '#d9d9d9', borderRadius: 25 }} span={6}>
+					Text Chat
+				</Col>
+			</Row>
+		</React.Fragment>
 	);
 }
 
