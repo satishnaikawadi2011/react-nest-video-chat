@@ -28,7 +28,8 @@ const AppIconButton: React.FC<Props> = ({ icon, backgroundColor, title }) => {
 					alignItems: 'center',
 					display: 'flex',
 					padding: 10,
-					borderRadius: '50%'
+					borderRadius: '50%',
+					cursor: 'pointer'
 				}}
 			>
 				{icon}
