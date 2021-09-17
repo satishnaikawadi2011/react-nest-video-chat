@@ -36,7 +36,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage(EVENTS.callUser)
 	handleCallUser(@MessageBody() data: CallUserData, @ConnectedSocket() socket: Socket) {
 		const { from, name, signalData, userToCall } = data;
-		this.server.to(userToCall).emit(EVENTS.callUser, { signal: signalData, from, name });
+		this.server.to(userToCall).emit(EVENTS.callUser, { signalData, from, name });
 	}
 
 	@SubscribeMessage(EVENTS.updateMyMedia)
@@ -49,11 +49,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	handleMessageUser(@MessageBody() data: MessageUserData, @ConnectedSocket() socket: Socket) {
 		const { message, name, to, sender } = data;
 		this.server.to(to).emit(EVENTS.messageReceived, { message, name, sender });
+		console.log(data);
 	}
 
 	@SubscribeMessage(EVENTS.answerCall)
 	handleAnswerCall(@MessageBody() data: AnswerCallData, @ConnectedSocket() socket: Socket) {
 		socket.broadcast.emit(EVENTS.updateUserMedia, { type: data.userName, currentMediaStatus: data.myMediaStatus });
+		console.log('Answering call on server and emitting callAccepted');
 		this.server.to(data.to).emit(EVENTS.callAccepted, data);
 	}
 

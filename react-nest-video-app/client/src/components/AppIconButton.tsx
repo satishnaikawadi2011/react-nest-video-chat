@@ -4,9 +4,10 @@ interface Props {
 	icon: any;
 	title: string;
 	backgroundColor?: string;
+	onClick?: () => void;
 }
 
-const AppIconButton: React.FC<Props> = ({ icon, backgroundColor, title }) => {
+const AppIconButton: React.FC<Props> = ({ icon, backgroundColor, title, onClick }) => {
 	return (
 		<div
 			style={{
@@ -31,6 +32,7 @@ const AppIconButton: React.FC<Props> = ({ icon, backgroundColor, title }) => {
 					borderRadius: '50%',
 					cursor: 'pointer'
 				}}
+				onClick={onClick}
 			>
 				{icon}
 			</div>

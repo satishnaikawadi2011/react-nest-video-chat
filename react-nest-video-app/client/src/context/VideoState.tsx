@@ -38,6 +38,10 @@ const VideoState = ({ children }: any) => {
 		setStream
 	] = useState<MediaStream | undefined>();
 	const [
+		otherUserStream,
+		setOtherUserStream
+	] = useState<MediaStream | undefined>();
+	const [
 		chat,
 		setChat
 	] = useState<MessageRcvType[]>([]);
@@ -85,23 +89,25 @@ const VideoState = ({ children }: any) => {
 		screenShare,
 		setScreenShare
 	] = useState(false);
+	const [
+		otherUserName,
+		setOtherUserName
+	] = useState('');
 
-	const myVideo: any = useRef();
-	const userVideo: any = useRef();
 	const connectionRef: any = useRef();
 	const screenTrackRef: any = useRef();
 
 	useEffect(() => {
 		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((currentStream) => {
 			setStream(currentStream);
-			myVideo.current.srcObject = currentStream;
 		});
 		// if (localStorage.getItem("name")) {
 		//   setName(localStorage.getItem("name"));
 		// }
 		socket.on(EVENTS.me, ({ socketId }: MeData) => setMe(socketId));
 		socket.on(EVENTS.endCall, () => {
-			window.location.reload();
+			message.error('Call Ended !!!', 2000);
+			window.location.replace('http://localhost:3000/');
 		});
 
 		socket.on(EVENTS.updateUserMedia, ({ type, currentMediaStatus }: UpdateUserMediaData) => {
@@ -140,8 +146,8 @@ const VideoState = ({ children }: any) => {
 	const answerCall = () => {
 		setCallAccepted(true);
 		setOtherUser(call!.from);
+		setOtherUserName(call!.name);
 		const peer = new Peer({ initiator: false, trickle: false, stream });
-
 		peer.on('signal', (data) => {
 			socket.emit(EVENTS.answerCall, {
 				signal: data,
@@ -157,13 +163,10 @@ const VideoState = ({ children }: any) => {
 		});
 
 		peer.on('stream', (currentStream) => {
-			userVideo.current.srcObject = currentStream;
+			setOtherUserStream(currentStream);
 		});
-
 		peer.signal(call!.signal);
-
 		connectionRef.current = peer;
-		console.log(connectionRef.current);
 	};
 
 	const callUser = (id: string) => {
@@ -177,11 +180,9 @@ const VideoState = ({ children }: any) => {
 				name
 			});
 		});
-
 		peer.on('stream', (currentStream) => {
-			userVideo.current.srcObject = currentStream;
+			setOtherUserStream(currentStream);
 		});
-
 		socket.on(EVENTS.callAccepted, ({ signal, userName }: CallAcceptedData) => {
 			setCallAccepted(true);
 			setUserName(userName);
@@ -197,7 +198,6 @@ const VideoState = ({ children }: any) => {
 		});
 
 		connectionRef.current = peer;
-		console.log(connectionRef.current);
 	};
 
 	const updateVideo = () => {
@@ -207,6 +207,7 @@ const VideoState = ({ children }: any) => {
 				currentMediaStatus: !currentStatus
 			});
 			stream!.getVideoTracks()[0].enabled = !currentStatus;
+			setStream(stream);
 			return !currentStatus;
 		});
 	};
@@ -250,11 +251,12 @@ const VideoState = ({ children }: any) => {
 							stream
 						);
 
-						myVideo.current.srcObject = stream;
+						// myVideo.current.srcObject = stream;
+						setStream(stream);
 						setScreenShare(false);
 					};
-
-					myVideo.current.srcObject = currentStream;
+					// myVideo.current.srcObject = currentStream;
+					setStream(currentStream);
 					screenTrackRef.current = screenTrack;
 					setScreenShare(true);
 				})
@@ -290,8 +292,9 @@ const VideoState = ({ children }: any) => {
 
 	const leaveCall = () => {
 		setCallEnded(true);
-
-		connectionRef.current.destroy();
+		if (connectionRef && connectionRef.current) {
+			connectionRef.current.destroy();
+		}
 		socket.emit(EVENTS.endCall, { id: otherUser });
 		window.location.reload();
 	};
@@ -302,7 +305,7 @@ const VideoState = ({ children }: any) => {
 	const sendMsg = (value: any) => {
 		socket.emit(EVENTS.messageUser, { name, to: otherUser, message: value, sender: name });
 		let msg: any = {};
-		msg.msg = value;
+		msg.message = value;
 		msg.type = 'sent';
 		msg.timestamp = Date.now();
 		msg.sender = name;
@@ -317,8 +320,6 @@ const VideoState = ({ children }: any) => {
 			value={{
 				call,
 				callAccepted,
-				myVideo,
-				userVideo,
 				stream,
 				name,
 				setName,
@@ -345,7 +346,10 @@ const VideoState = ({ children }: any) => {
 				updateMic,
 				screenShare,
 				handleScreenSharing,
-				fullScreen
+				fullScreen,
+				otherUserStream,
+				otherUserName,
+				setOtherUserName
 			}}
 		>
 			{children}

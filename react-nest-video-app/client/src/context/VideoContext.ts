@@ -1,11 +1,9 @@
 import React, { createContext } from 'react';
 import { CallType, MessageRcvType } from './VideoState';
 
-interface VideoContextInterface {
+export interface VideoContextInterface {
 	call: CallType | undefined;
 	callAccepted: boolean;
-	myVideo: any;
-	userVideo: any;
 	stream: MediaStream | undefined;
 	name: string;
 	setName: React.Dispatch<React.SetStateAction<string>>;
@@ -33,6 +31,9 @@ interface VideoContextInterface {
 	screenShare: boolean;
 	handleScreenSharing: any;
 	fullScreen: any;
+	otherUserStream: MediaStream | undefined;
+	otherUserName: string;
+	setOtherUserName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const VideoContext = createContext<VideoContextInterface | undefined>(undefined);
