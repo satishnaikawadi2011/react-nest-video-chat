@@ -93,6 +93,14 @@ const VideoState = ({ children }: any) => {
 		otherUserName,
 		setOtherUserName
 	] = useState('');
+	const [
+		isCamAllowed,
+		setIsCamAllowed
+	] = useState(false);
+	const [
+		isMicAllowed,
+		setIsMicAllowed
+	] = useState(false);
 
 	const connectionRef: any = useRef();
 	const screenTrackRef: any = useRef();
@@ -349,7 +357,11 @@ const VideoState = ({ children }: any) => {
 				fullScreen,
 				otherUserStream,
 				otherUserName,
-				setOtherUserName
+				setOtherUserName,
+				isMicAllowed,
+				setIsMicAllowed,
+				isCamAllowed,
+				setIsCamAllowed
 			}}
 		>
 			{children}

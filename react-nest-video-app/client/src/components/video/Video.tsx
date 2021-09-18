@@ -5,48 +5,32 @@ import VideoIcon from '../../icons/Video';
 import CallEnd from '../../icons/CallEnd';
 import DesktopIcon from '../../icons/Desktop';
 import AudioIcon from '../../icons/Audio';
-import { Redirect } from 'react-router-dom';
-
-// import chatVidSrc from '../../assets/chat.mp4';
 import VideoContext from '../../context/VideoContext';
 import VideoOffIcon from '../../icons/VideoOff';
 import AudioOff from '../../icons/AudioOff';
+
 import { UserOutlined } from '@ant-design/icons';
 import Chat from '../chat/Chat';
 import { useHistory } from 'react-router';
 
 const Video = () => {
 	const history = useHistory();
-	const {
-		stream,
-		otherUserName,
-		name,
-		otherUserStream,
-		myVdoStatus,
-		handleScreenSharing,
-		userVdoStatus,
-		updateVideo,
-		myMicStatus,
-		updateMic,
-		leaveCall,
-		chat,
-		call
-	}: any = useContext(VideoContext);
+	const vidState = useContext(VideoContext)!;
 	const userV = useRef<HTMLVideoElement>(null);
 	const myV = useRef<HTMLVideoElement>(null);
 	useEffect(
 		() => {
-			if (stream && myV.current) {
-				myV.current.srcObject = stream;
+			if (vidState.stream && myV.current) {
+				myV.current.srcObject = vidState.stream;
 			}
 
-			if (otherUserStream && userV.current) {
-				userV.current.srcObject = otherUserStream;
+			if (vidState.otherUserStream && userV.current) {
+				userV.current.srcObject = vidState.otherUserStream;
 			}
 		},
 		[
-			stream,
-			otherUserStream
+			vidState.stream,
+			vidState.otherUserStream
 		]
 	);
 
@@ -61,13 +45,13 @@ const Video = () => {
 					overflowX: 'hidden'
 				}}
 			>
-				{stream && (
+				{vidState.stream && (
 					<Col
 						span={16}
 						style={{
 							marginTop:
 
-									chat.length ? 25 :
+									vidState.chat.length ? 25 :
 									0
 						}}
 					>
@@ -96,7 +80,7 @@ const Video = () => {
 									objectFit: 'cover',
 									opacity:
 
-											userVdoStatus ? 1 :
+											vidState.userVdoStatus ? 1 :
 											0
 								}}
 								autoPlay
@@ -112,13 +96,13 @@ const Video = () => {
 									position: 'absolute',
 									opacity:
 										`${
-											userVdoStatus ? '0' :
+											vidState.userVdoStatus ? '0' :
 											'1'}`
 								}}
 								size={98}
-								icon={!otherUserName && <UserOutlined />}
+								icon={!vidState.otherUserName && <UserOutlined />}
 							>
-								{otherUserName}
+								{vidState.otherUserName}
 							</Avatar>
 							<div
 								style={{
@@ -132,7 +116,7 @@ const Video = () => {
 									borderRadius: 25,
 									borderColor:
 
-											myVdoStatus ? 'white' :
+											vidState.myVdoStatus ? 'white' :
 											'black',
 									borderWidth: 2,
 									borderStyle: 'solid'
@@ -149,7 +133,7 @@ const Video = () => {
 										borderStyle: 'solid',
 										opacity:
 											`${
-												myVdoStatus ? 1 :
+												vidState.myVdoStatus ? 1 :
 												0}`
 									}}
 									autoPlay
@@ -167,13 +151,13 @@ const Video = () => {
 										transform: 'translate(50%,-50%)',
 										opacity:
 											`${
-												myVdoStatus ? 0 :
+												vidState.myVdoStatus ? 0 :
 												1}`
 									}}
 									size={50}
-									icon={!name && <UserOutlined />}
+									icon={!vidState.name && <UserOutlined />}
 								>
-									{name}
+									{vidState.name}
 								</Avatar>
 							</div>
 						</Row>
@@ -181,34 +165,34 @@ const Video = () => {
 							<AppIconButton
 								title="Cam"
 								onClick={() => {
-									updateVideo();
+									vidState.updateVideo();
 								}}
 								icon={
 
-										myVdoStatus ? <VideoIcon height={30} width={30} /> :
+										vidState.myVdoStatus ? <VideoIcon height={30} width={30} /> :
 										<VideoOffIcon height={30} width={30} />
 								}
 							/>
 							<AppIconButton
 								title="Mic"
 								onClick={() => {
-									updateMic();
+									vidState.updateMic();
 								}}
 								icon={
 
-										myMicStatus ? <AudioIcon height={30} width={30} /> :
+										vidState.myMicStatus ? <AudioIcon height={30} width={30} /> :
 										<AudioOff height={30} width={30} />
 								}
 							/>
 							<AppIconButton
 								title="Share"
-								onClick={() => handleScreenSharing()}
+								onClick={() => vidState.handleScreenSharing()}
 								icon={<DesktopIcon height={30} width={30} />}
 							/>
 							<AppIconButton
 								title="Leave"
 								onClick={() => {
-									leaveCall();
+									vidState.leaveCall();
 									history.push('/');
 									window.location.reload();
 								}}
@@ -218,7 +202,7 @@ const Video = () => {
 						</Row>
 					</Col>
 				)}
-				<Chat />
+				{vidState.stream && <Chat />}
 			</Row>
 		</React.Fragment>
 	);

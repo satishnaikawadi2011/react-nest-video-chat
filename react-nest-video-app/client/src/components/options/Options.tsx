@@ -2,17 +2,17 @@ import React, { useState, useContext, useEffect, useRef } from "react";
 import { Input, Button, Tooltip, Modal, message } from "antd";
 // import Phone from "../assests/phone.gif";
 import Teams from "../../assets/teams.mp3";
-import classes from "./options.module.css";
+import * as classes from "./options.module.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import VideoContext, { VideoContextInterface } from "../../context/VideoContext";
+import VideoContext from "../../context/VideoContext";
 import {
   UserOutlined,
   CopyOutlined,
   InfoCircleOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
-import { socket } from "../../context/VideoState";
-import CallEnd from "../../icons/CallEnd";
+// import { socket } from "../../context/VideoState";
+// import CallEnd from "../../icons/CallEnd";
 import { useHistory } from "react-router";
 
 const Options = () => {
@@ -20,40 +20,26 @@ const Options = () => {
   const [idToCall, setIdToCall] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const Audio:any = useRef();
-    const {
-    call,
-    callAccepted,
-    userVideo,
-    name,
-    setName,
-    me,
-    callUser,
-    answerCall,
-    otherUser,
-    setOtherUser,
-      leaveCall1,
-      otherUserName,
-    setOtherUserName
-  }: any = useContext<VideoContextInterface | undefined>(VideoContext);
+    const vidState = useContext(VideoContext)!;
 
     const callHandler = () => {
-    if (!name.length) {
+    if (!vidState.name.length) {
       message.error("Please enter your name to call!");
     } else if (!idToCall.length) {
       message.error("Please enter id of the other user!");
-    } else if (!otherUserName.length) {
+    } else if (!vidState.otherUserName.length) {
       message.error("Please enter name of the other user!");
     } else {
-       callUser(idToCall);
+       vidState.callUser(idToCall);
     }
   }
   
   useEffect(() => {
-    if (callAccepted || otherUser) {
+    if (vidState.callAccepted) {
       console.log("Here");
       history.push('/meet',{from:'home'});
     }
-  },[callAccepted,userVideo,history,otherUser])
+  },[vidState.callAccepted,history])
 
   useEffect(() => {
     if (isModalVisible) {
@@ -67,17 +53,17 @@ const Options = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    leaveCall1();
+    vidState.leaveCall1();
     window.location.reload();
   };
   useEffect(() => {
-    if (call) {
-      if (call?.isReceivingCall && !callAccepted) {
+    if (vidState.call) {
+      if (vidState.call?.isReceivingCall && !vidState.callAccepted) {
       setIsModalVisible(true);
-      setOtherUser(call.from);
+      vidState.setOtherUser(vidState.call.from);
     } else setIsModalVisible(false);
     }
-  }, [call,callAccepted]);
+  }, [vidState.call,vidState.callAccepted]);
 
   return (
     <div className={classes.options}>
@@ -88,17 +74,17 @@ const Options = () => {
           placeholder="Your name"
           prefix={<UserOutlined />}
           maxLength={15}
-          suffix={<small>{name.length}/15</small>}
-          value={name}
+          suffix={<small>{vidState.name.length}/15</small>}
+          value={vidState.name}
           onChange={(e) => {
-            setName(e.target.value);
-            localStorage.setItem("name", e.target.value);
+            vidState.setName(e.target.value);
+            // localStorage.setItem("name", e.target.value);
           }}
           className={classes.inputgroup}
         />
 
         <div className={classes.share_options}>
-          <CopyToClipboard text={me}>
+          <CopyToClipboard text={vidState.me}>
             <Button
               type="primary"
               icon={<CopyOutlined />}
@@ -132,8 +118,8 @@ const Options = () => {
           placeholder="Enter name to call"
           size="large"
           className={classes.inputgroup}
-          value={otherUserName}
-          onChange={(e) => setOtherUserName(e.target.value)}
+          value={vidState.otherUserName}
+          onChange={(e) => vidState.setOtherUserName(e.target.value)}
           style={{ marginRight: "0.5rem", marginBottom: "0.5rem" }}
           prefix={<UserOutlined className="site-form-item-icon" />}
           suffix={
@@ -154,7 +140,7 @@ const Options = () => {
         
       </div>
 
-      {call && call.isReceivingCall && !callAccepted && (
+      {vidState.call && vidState.call.isReceivingCall && !vidState.callAccepted && (
         <>
           <audio src={Teams} loop ref={Audio} />
           <Modal
@@ -166,7 +152,7 @@ const Options = () => {
           >
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <h1>
-                {call.name} is calling you:{" "}
+                {vidState.call.name} is calling you:{" "}
                 {/* <img
                   src={Phone}
                   alt="phone ringing"
@@ -181,7 +167,7 @@ const Options = () => {
                 color="#29bb89"
                 icon={<PhoneOutlined />}
                 onClick={() => {
-                  answerCall();
+                  vidState.answerCall();
                   Audio.current.pause();
                 }}
                 tabIndex={0}

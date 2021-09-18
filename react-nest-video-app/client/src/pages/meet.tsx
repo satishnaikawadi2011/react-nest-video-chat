@@ -1,27 +1,29 @@
 // import { Col, Row } from 'antd';
 import { Button, message } from 'antd';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import AppLoader from '../animations/components/AppLoader';
 import Video from '../components/video/Video';
 import VideoContext from '../context/VideoContext';
 
 const Meet = () => {
-	const { leaveCall }: any = useContext(VideoContext);
+	const vidState = useContext(VideoContext)!;
+	const [
+		isPageRefreshed,
+		setIsPageRefreshed
+	] = useState(false);
 
 	useEffect(() => {
-		if (window.performance) {
-			console.info("window.performance work's fine on this browser");
-		}
-		if (performance.navigation.type === 1) {
-			leaveCall();
+		if (performance.navigation.type === 1 && isPageRefreshed) {
+			vidState.leaveCall();
 			window.location.replace('http://localhost:3000/');
 		}
-		else {
-			console.info('This page is not reloaded');
-		}
+		return () => {
+			setIsPageRefreshed(false);
+		};
 	}, []);
 	const location: any = useLocation();
+	// console.log(location);
 	if (!location.state || location.state.from !== 'home') {
 		return (
 			<div

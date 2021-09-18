@@ -14,109 +14,100 @@ const Chat = () => {
 		setMessage
 	] = useState<string>('');
 
-	const myChats: any = [
-		{
-			message: 'Hi',
-			sender: 'saty',
-			timestamp: Date.now() * Math.random(),
-			type: 'sent'
-		},
-		{
-			message: 'Hey',
-			sender: 'Avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Nope',
-			sender: 'saty',
-			timestamp: Date.now() * Math.random(),
-			type: 'sent'
-		},
-		{
-			message: 'Nope',
-			sender: 'saty',
-			timestamp: Date.now() * Math.random(),
-			type: 'sent'
-		},
-		{
-			message: 'Nope',
-			sender: 'saty',
-			timestamp: Date.now() * Math.random(),
-			type: 'sent'
-		},
-		{
-			message: 'Nope',
-			sender: 'saty',
-			timestamp: Date.now() * Math.random(),
-			type: 'sent'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		},
-		{
-			message: 'Let go',
-			sender: 'avi',
-			timestamp: Date.now() * Math.random(),
-			type: 'rcv'
-		}
-	];
+	// const myChats: any = [
+	// 	{
+	// 		message: 'Hi',
+	// 		sender: 'saty',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'sent'
+	// 	},
+	// 	{
+	// 		message: 'Hey',
+	// 		sender: 'Avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Nope',
+	// 		sender: 'saty',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'sent'
+	// 	},
+	// 	{
+	// 		message: 'Nope',
+	// 		sender: 'saty',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'sent'
+	// 	},
+	// 	{
+	// 		message: 'Nope',
+	// 		sender: 'saty',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'sent'
+	// 	},
+	// 	{
+	// 		message: 'Nope',
+	// 		sender: 'saty',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'sent'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	},
+	// 	{
+	// 		message: 'Let go',
+	// 		sender: 'avi',
+	// 		timestamp: Date.now() * Math.random(),
+	// 		type: 'rcv'
+	// 	}
+	// ];
 
-	const { name, sendMsg: sendMsgFunc, msgRcv, chat, setChat, userName }: any = useContext(VideoContext);
-
-	useEffect(
-		() => {
-			console.log(chat);
-		},
-		[
-			chat
-		]
-	);
+	const vidState = useContext(VideoContext)!;
 
 	const sendMessage = () => {
 		if (message === '' || message.trim() === '') return;
 		// console.log(message);
 
-		sendMsgFunc(message);
+		vidState.sendMsg(message);
 
 		setMessage('');
 	};
@@ -127,8 +118,8 @@ const Chat = () => {
 		msg.type = 'rcv';
 		msg.sender = sender;
 		msg.timestamp = Date.now();
-		setChat([
-			...chat,
+		vidState.setChat([
+			...vidState.chat,
 			msg
 		]);
 	});
@@ -140,22 +131,22 @@ const Chat = () => {
 			if (dummy && dummy.current) dummy.current.scrollIntoView({ behavior: 'smooth' });
 		},
 		[
-			chat
+			vidState.chat
 		]
 	);
 
 	useEffect(
 		() => {
-			if (msgRcv && msgRcv.value) {
+			if (vidState.msgRcv && vidState.msgRcv.value) {
 				notification.open({
 					message: '',
-					description: `${msgRcv.sender}: ${msgRcv.value}`,
+					description: `${vidState.msgRcv.sender}: ${vidState.msgRcv.value}`,
 					icon: <MessageOutlined style={{ color: '#108ee9' }} />
 				});
 			}
 		},
 		[
-			msgRcv
+			vidState.msgRcv
 		]
 	);
 
@@ -169,7 +160,7 @@ const Chat = () => {
 				padding: 0,
 				marginTop:
 
-						chat.length ? 25 :
+						vidState.chat.length ? 25 :
 						0
 			}}
 			span={6}
@@ -185,8 +176,8 @@ const Chat = () => {
 				className="chat_container"
 			>
 				{
-					chat.length ? <div className="msg_flex">
-						{chat.map((msg: any) => (
+					vidState.chat.length ? <div className="msg_flex">
+						{vidState.chat.map((msg: any) => (
 							<div
 								key={msg.timestamp}
 								className={
