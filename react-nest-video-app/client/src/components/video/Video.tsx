@@ -193,7 +193,7 @@ const Video = () => {
 								title="Leave"
 								onClick={() => {
 									vidState.leaveCall();
-									history.push('/');
+									history.push('/', { from: 'endCall' });
 									window.location.reload();
 								}}
 								backgroundColor="red"

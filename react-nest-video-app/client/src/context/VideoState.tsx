@@ -105,7 +105,7 @@ const VideoState = ({ children }: any) => {
 	const connectionRef: any = useRef();
 	const screenTrackRef: any = useRef();
 
-	useEffect(() => {
+	const callOnStart = () => {
 		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((currentStream) => {
 			setStream(currentStream);
 		});
@@ -115,6 +115,7 @@ const VideoState = ({ children }: any) => {
 		socket.on(EVENTS.me, ({ socketId }: MeData) => setMe(socketId));
 		socket.on(EVENTS.endCall, () => {
 			message.error('Call Ended !!!', 2000);
+			window.location.reload();
 			window.location.replace('http://localhost:3000/');
 		});
 
@@ -145,6 +146,10 @@ const VideoState = ({ children }: any) => {
 				setMsgRcv(undefined);
 			}, 2000);
 		});
+	};
+
+	useEffect(() => {
+		callOnStart();
 	}, []);
 
 	// useEffect(() => {
@@ -305,6 +310,7 @@ const VideoState = ({ children }: any) => {
 		}
 		socket.emit(EVENTS.endCall, { id: otherUser });
 		window.location.reload();
+		window.location.replace('http://localhost:3000/');
 	};
 
 	const leaveCall1 = () => {
@@ -361,7 +367,8 @@ const VideoState = ({ children }: any) => {
 				isMicAllowed,
 				setIsMicAllowed,
 				isCamAllowed,
-				setIsCamAllowed
+				setIsCamAllowed,
+				callOnStart
 			}}
 		>
 			{children}

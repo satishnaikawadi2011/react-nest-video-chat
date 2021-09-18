@@ -1,5 +1,5 @@
 // import { Col, Row } from 'antd';
-import { Button, message } from 'antd';
+import { Button } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import AppLoader from '../animations/components/AppLoader';
@@ -8,20 +8,20 @@ import VideoContext from '../context/VideoContext';
 
 const Meet = () => {
 	const vidState = useContext(VideoContext)!;
-	const [
-		isPageRefreshed,
-		setIsPageRefreshed
-	] = useState(false);
 
-	useEffect(() => {
-		if (performance.navigation.type === 1 && isPageRefreshed) {
-			vidState.leaveCall();
-			window.location.replace('http://localhost:3000/');
-		}
-		return () => {
-			setIsPageRefreshed(false);
-		};
-	}, []);
+	useEffect(
+		() => {
+			if (!vidState.name && !vidState.otherUserName) {
+				vidState.leaveCall();
+				// window.location.replace('http://localhost:3000/');
+			}
+		},
+		[
+			vidState.name,
+			vidState.otherUserName
+		]
+	);
+
 	const location: any = useLocation();
 	// console.log(location);
 	if (!location.state || location.state.from !== 'home') {
@@ -49,7 +49,6 @@ const Meet = () => {
 			<div
 				style={{
 					height: '100vh',
-					// backgroundColor: 'blue',
 					padding: 0,
 					overflow: 'hidden'
 				}}

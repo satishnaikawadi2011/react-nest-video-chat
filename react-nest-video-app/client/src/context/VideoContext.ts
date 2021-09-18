@@ -38,6 +38,7 @@ export interface VideoContextInterface {
 	setIsCamAllowed: React.Dispatch<React.SetStateAction<boolean>>;
 	isMicAllowed: boolean;
 	setIsMicAllowed: React.Dispatch<React.SetStateAction<boolean>>;
+	callOnStart: any;
 }
 
 const VideoContext = createContext<VideoContextInterface | undefined>(undefined);

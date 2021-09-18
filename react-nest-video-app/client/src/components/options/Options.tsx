@@ -22,7 +22,12 @@ const Options = () => {
   const Audio:any = useRef();
     const vidState = useContext(VideoContext)!;
 
-    const callHandler = () => {
+  const callHandler = () => {
+      
+    if (!vidState.isCamAllowed || !vidState.isMicAllowed) {
+      message.error("Please allow both camera and microphone permissions before procced to call !")
+      return;
+    }
     if (!vidState.name.length) {
       message.error("Please enter your name to call!");
     } else if (!idToCall.length) {
@@ -167,6 +172,10 @@ const Options = () => {
                 color="#29bb89"
                 icon={<PhoneOutlined />}
                 onClick={() => {
+                  if (!vidState.isCamAllowed || !vidState.isMicAllowed) {
+                    message.error("Please allow both camera and microphone permissions before procced to call !")
+                    return;
+                  }
                   vidState.answerCall();
                   Audio.current.pause();
                 }}

@@ -1,7 +1,5 @@
-import { Col, Row } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './App.css';
-import VideoState from './context/VideoState';
 import Home from './pages';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Meet from './pages/meet';
@@ -22,6 +20,7 @@ function App() {
 	}, []);
 	useEffect(
 		() => {
+			vidState.callOnStart();
 			console.log('Works');
 		},
 		[
