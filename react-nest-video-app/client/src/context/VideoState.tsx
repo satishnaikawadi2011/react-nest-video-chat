@@ -152,10 +152,6 @@ const VideoState = ({ children }: any) => {
 		callOnStart();
 	}, []);
 
-	// useEffect(() => {
-	//   console.log(chat);
-	// }, [chat]);
-
 	const answerCall = () => {
 		setCallAccepted(true);
 		setOtherUser(call!.from);

@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Input, Button, Tooltip, Modal, message } from "antd";
-// import Phone from "../assests/phone.gif";
 import Teams from "../../assets/teams.mp3";
 import * as classes from "./options.module.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -11,8 +10,6 @@ import {
   InfoCircleOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
-// import { socket } from "../../context/VideoState";
-// import CallEnd from "../../icons/CallEnd";
 import { useHistory } from "react-router";
 
 const Options = () => {
@@ -83,7 +80,6 @@ const Options = () => {
           value={vidState.name}
           onChange={(e) => {
             vidState.setName(e.target.value);
-            // localStorage.setItem("name", e.target.value);
           }}
           className={classes.inputgroup}
         />
@@ -158,12 +154,6 @@ const Options = () => {
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <h1>
                 {vidState.call.name} is calling you:{" "}
-                {/* <img
-                  src={Phone}
-                  alt="phone ringing"
-                  className={classes.phone}
-                  style={{ display: "inline-block" }}
-                /> */}
               </h1>
             </div>
             <div className={classes.btnDiv}>

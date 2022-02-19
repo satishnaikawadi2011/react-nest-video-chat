@@ -14,98 +14,10 @@ const Chat = () => {
 		setMessage
 	] = useState<string>('');
 
-	// const myChats: any = [
-	// 	{
-	// 		message: 'Hi',
-	// 		sender: 'saty',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'sent'
-	// 	},
-	// 	{
-	// 		message: 'Hey',
-	// 		sender: 'Avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Nope',
-	// 		sender: 'saty',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'sent'
-	// 	},
-	// 	{
-	// 		message: 'Nope',
-	// 		sender: 'saty',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'sent'
-	// 	},
-	// 	{
-	// 		message: 'Nope',
-	// 		sender: 'saty',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'sent'
-	// 	},
-	// 	{
-	// 		message: 'Nope',
-	// 		sender: 'saty',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'sent'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	},
-	// 	{
-	// 		message: 'Let go',
-	// 		sender: 'avi',
-	// 		timestamp: Date.now() * Math.random(),
-	// 		type: 'rcv'
-	// 	}
-	// ];
-
 	const vidState = useContext(VideoContext)!;
 
 	const sendMessage = () => {
 		if (message === '' || message.trim() === '') return;
-		// console.log(message);
 
 		vidState.sendMsg(message);
 

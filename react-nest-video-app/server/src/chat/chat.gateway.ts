@@ -30,7 +30,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	handleDisconnect(client: Socket) {
 		this.logger.log(`Client disconnected: ${client.id}`);
-		// client.broadcast.emit(EVENTS.callEnded);
 	}
 
 	@SubscribeMessage(EVENTS.callUser)

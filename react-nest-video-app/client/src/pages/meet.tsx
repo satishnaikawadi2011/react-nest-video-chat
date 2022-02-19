@@ -1,4 +1,3 @@
-// import { Col, Row } from 'antd';
 import { Button } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -13,7 +12,6 @@ const Meet = () => {
 		() => {
 			if (!vidState.name && !vidState.otherUserName) {
 				vidState.leaveCall();
-				// window.location.replace('http://localhost:3000/');
 			}
 		},
 		[
@@ -23,7 +21,6 @@ const Meet = () => {
 	);
 
 	const location: any = useLocation();
-	// console.log(location);
 	if (!location.state || location.state.from !== 'home') {
 		return (
 			<div

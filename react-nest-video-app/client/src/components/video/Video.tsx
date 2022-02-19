@@ -58,9 +58,7 @@ const Video = () => {
 						<Row
 							style={{
 								borderRadius: 25,
-								// height: '78%',
 								height: '72vh',
-								// backgroundColor: 'red',
 								margin: 10,
 								position: 'relative',
 								display: 'flex',
